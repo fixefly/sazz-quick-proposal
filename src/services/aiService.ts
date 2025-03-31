@@ -1,3 +1,4 @@
+
 import { ProposalFormData } from "@/components/ProposalForm";
 
 export const generateProposal = async (formData: ProposalFormData): Promise<string> => {
@@ -39,15 +40,25 @@ const createProposalTemplate = (data: ProposalFormData): string => {
     }
   };
 
+  const experienceDetails = {
+    "ui-ux": "UI/UX design for websites, web applications, and mobile apps. My design approach focuses on creating intuitive, user-friendly interfaces that enhance user experience while maintaining aesthetic appeal.",
+    "graphic-design": "graphic design projects across various industries. I create visually compelling designs that effectively communicate brand messages and engage target audiences.",
+    "logo-branding": "logo design and branding projects. I develop distinctive visual identities that reflect brand values and create lasting impressions with target audiences.",
+    "cms": "content management systems including WordPress, Wix, Webflow, and Framer. I build customized, responsive websites with user-friendly admin interfaces.",
+    "development": "web development using various programming languages and frameworks. I create clean, maintainable code that results in high-performing applications."
+  };
+
   const tone = tonePhrases[data.tone as keyof typeof tonePhrases];
+  const experienceType = data.experienceType as keyof typeof experienceDetails;
+  const experienceDescription = experienceDetails[experienceType] || "various design and development projects";
   
   const proposal = `Hello,
 
-${tone.intro} the ${data.jobTitle} position. After carefully reviewing your requirements, I understand you need someone with expertise in ${data.clientRequirements || "the skills mentioned in your job posting"}.
+${tone.intro} the ${data.jobTitle} position. After carefully reviewing your requirements, I understand you need someone with expertise in ${data.jobDescription ? "the areas described in your job posting" : "this field"}.
 
-${tone.experience} ${data.yourExperience}. This directly relates to your project requirements and positions me to deliver excellent results for you.
+${tone.experience} ${experienceDescription} With 7+ years of experience and over 200 successfully completed client projects, I have the expertise needed to deliver exceptional results for your project. ${data.yourExperience ? `Additionally, ${data.yourExperience}` : ""}
 
-I approach each project with attention to detail and clear communication throughout the process. My goal is to exceed expectations and build a long-term professional relationship.
+I approach each project with meticulous attention to detail and maintain clear communication throughout the process. My goal is to exceed expectations and establish a long-term professional relationship.
 
 ${tone.closing}
 

@@ -20,6 +20,7 @@ export interface ProposalFormData {
   yourExperience: string;
   tone: string;
   length: number;
+  experienceType: string;
 }
 
 const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) => {
@@ -30,6 +31,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
     yourExperience: '',
     tone: 'professional',
     length: 150,
+    experienceType: 'ui-ux',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,8 +39,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (value: string) => {
-    setFormData(prev => ({ ...prev, tone: value }));
+  const handleSelectChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSliderChange = (value: number[]) => {
@@ -83,33 +85,39 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="clientRequirements">Client Requirements (Skills, Experience)</Label>
-            <Textarea
-              id="clientRequirements"
-              name="clientRequirements"
-              placeholder="What specific skills or experience is the client looking for?"
-              rows={3}
-              value={formData.clientRequirements}
-              onChange={handleChange}
-            />
+            <Label htmlFor="experienceType">Relevant Experience</Label>
+            <Select 
+              value={formData.experienceType} 
+              onValueChange={(value) => handleSelectChange('experienceType', value)}
+            >
+              <SelectTrigger id="experienceType">
+                <SelectValue placeholder="Select your area of expertise" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ui-ux">UI/UX Design (Website, Webapp, Mobile Apps)</SelectItem>
+                <SelectItem value="graphic-design">Graphic Design</SelectItem>
+                <SelectItem value="logo-branding">Logo and Branding</SelectItem>
+                <SelectItem value="cms">CMS (WordPress, Wix, Webflow, Framer)</SelectItem>
+                <SelectItem value="development">Development with Code</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="yourExperience">Your Relevant Experience</Label>
+            <Label htmlFor="yourExperience">Additional Details</Label>
             <Textarea
               id="yourExperience"
               name="yourExperience"
-              placeholder="Briefly describe your relevant experience for this job"
+              placeholder="Any additional details about your experience"
               rows={3}
               value={formData.yourExperience}
               onChange={handleChange}
-              required
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="tone">Tone</Label>
-            <Select value={formData.tone} onValueChange={handleSelectChange}>
+            <Select value={formData.tone} onValueChange={(value) => handleSelectChange('tone', value)}>
               <SelectTrigger id="tone">
                 <SelectValue placeholder="Select a tone" />
               </SelectTrigger>
