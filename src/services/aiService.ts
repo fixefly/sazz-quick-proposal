@@ -1,4 +1,3 @@
-
 import { ProposalFormData } from "@/components/ProposalForm";
 
 export const generateProposal = async (formData: ProposalFormData): Promise<string> => {
@@ -19,22 +18,22 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   
   const tonePhrases = {
     professional: {
-      intro: "I'm writing to express my interest in",
+      intro: "I'm writing to express my interest in your project. After reviewing your requirements,",
       experience: "I have extensive experience in",
       closing: "I'm confident I can deliver excellent results for your project."
     },
     friendly: {
-      intro: "I noticed your posting for",
+      intro: "I noticed your project and I'm excited about the opportunity. Based on your description,",
       experience: "I've worked on similar projects involving",
       closing: "I'd love to chat more about how I can help with your project!"
     },
     confident: {
-      intro: "I'm the freelancer you're looking for to handle",
+      intro: "I'm the freelancer you're looking for to handle your project needs.",
       experience: "My background includes successful delivery of",
       closing: "I guarantee high-quality work delivered on time."
     },
     formal: {
-      intro: "I would like to submit my application for",
+      intro: "I would like to submit my application for your consideration. Upon reviewing your project details,",
       experience: "My professional background encompasses",
       closing: "I would welcome the opportunity to discuss how my qualifications align with your requirements."
     }
@@ -54,7 +53,7 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   
   const proposal = `Hello,
 
-${tone.intro} the ${data.jobTitle} position. After carefully reviewing your requirements, I understand you need someone with expertise in ${data.jobDescription ? "the areas described in your job posting" : "this field"}.
+${tone.intro} I understand you need someone with expertise in this field.
 
 ${tone.experience} ${experienceDescription} With 7+ years of experience and over 200 successfully completed client projects, I have the expertise needed to deliver exceptional results for your project. ${data.yourExperience ? `Additionally, ${data.yourExperience}` : ""}
 
