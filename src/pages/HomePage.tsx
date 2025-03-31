@@ -55,7 +55,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="container mx-auto py-6 px-4">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-primary mb-2">Proposal Generator</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">FreeProp</h1>
         <p className="text-lg text-muted-foreground">Create customized job proposals in seconds</p>
       </div>
 

@@ -33,11 +33,11 @@ const ProposalOutput: React.FC<ProposalOutputProps> = ({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Your Proposal</CardTitle>
+        <CardTitle className="text-xl font-semibold">Your FreeProp Proposal</CardTitle>
       </CardHeader>
       <CardContent>
         <Textarea
-          className="min-h-[300px] font-medium text-base"
+          className="min-h-[300px] font-medium text-base whitespace-pre-wrap"
           value={editedProposal}
           onChange={(e) => setEditedProposal(e.target.value)}
           disabled={isLoading}

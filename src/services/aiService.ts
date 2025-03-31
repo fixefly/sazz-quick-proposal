@@ -17,86 +17,132 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   // This function simulates what an AI would generate
   // In a real app, this would be replaced with an actual API call
   
-  const tonePhrases = {
-    professional: {
-      intro: "I'm writing to express my interest in your project.",
-      understanding: "After carefully reviewing your requirements,",
-      experience: "I have extensive experience in",
-      closing: "I'm confident I can deliver excellent results that meet all your project goals."
-    },
-    friendly: {
-      intro: "I noticed your project and I'm excited about the opportunity!",
-      understanding: "Looking at your description,",
-      experience: "I've worked on similar projects involving",
-      closing: "I'd love to chat more about how I can help bring your vision to life!"
-    },
-    confident: {
-      intro: "I'm the ideal freelancer for your project.",
-      understanding: "Based on the details you've provided,",
-      experience: "My background includes successful delivery of",
-      closing: "I guarantee high-quality work delivered on time with no compromises."
-    },
-    formal: {
-      intro: "I would like to submit my application for your consideration.",
-      understanding: "Upon thorough analysis of your project details,",
-      experience: "My professional background encompasses",
-      closing: "I would welcome the opportunity to discuss how my qualifications align with your requirements."
-    }
-  };
-
   const experienceDetails = {
-    "ui-ux": "UI/UX design for websites, web applications, and mobile apps. My design approach focuses on creating intuitive, user-friendly interfaces that enhance user experience while maintaining aesthetic appeal.",
-    "graphic-design": "graphic design projects across various industries. I create visually compelling designs that effectively communicate brand messages and engage target audiences.",
-    "logo-branding": "logo design and branding projects. I develop distinctive visual identities that reflect brand values and create lasting impressions with target audiences.",
-    "cms": "content management systems including WordPress, Wix, Webflow, and Framer. I build customized, responsive websites with user-friendly admin interfaces.",
-    "development": "web development using various programming languages and frameworks. I create clean, maintainable code that results in high-performing applications."
+    "ui-ux": "UI/UX design for websites, web applications, and mobile apps",
+    "graphic-design": "graphic design across various industries",
+    "logo-branding": "logo design and branding",
+    "cms": "content management systems including WordPress, Wix, Webflow, and Framer",
+    "development": "web and app development"
   };
 
-  const tone = tonePhrases[data.tone as keyof typeof tonePhrases];
   const experienceType = data.experienceType as keyof typeof experienceDetails;
   const experienceDescription = experienceDetails[experienceType] || "various design and development projects";
   
   // Extract key information from job description if available
-  let jobInsights = "";
+  let jobKeywords = "";
+  let projectBenefits = "";
   if (data.jobDescription && data.jobDescription.trim().length > 0) {
     // Simple keyword extraction to demonstrate understanding the job
     const keywords = extractKeywords(data.jobDescription);
     if (keywords.length > 0) {
-      jobInsights = `I understand you need ${keywords.join(", ")} for your project. `;
+      jobKeywords = keywords.join(", ");
+      
+      // Generate project benefits based on job description and experience
+      projectBenefits = generateProjectBenefits(data.jobDescription, experienceType);
     }
   }
 
-  const proposal = `Hello,
+  // Format the proposal using the template structure
+  const proposal = `**— Cover Letter Introduction —** 
+Hi!
 
-${tone.intro} ${tone.understanding} ${jobInsights}I'm ready to help you achieve your goals.
+Thank you so much for providing detailed information about your ${data.jobTitle} job. It instantly grabbed my attention and aligns perfectly with my experience as a ${experienceDescription} specialist.
 
-${tone.experience} ${experienceDescription} With 7+ years of experience and over 200 successfully completed client projects, I have the expertise needed to deliver exceptional results for your project. ${data.yourExperience ? `Additionally, ${data.yourExperience}` : ""}
+**— Provide an example of your work —** 
 
-I approach each project with meticulous attention to detail and maintain clear communication throughout the process. My goal is to exceed expectations and establish a long-term professional relationship.
+As you can view on my Upwork profile, I've completed numerous ${experienceDescription} jobs with 5-star reviews, including overly positive client feedback. Two specific examples that showcase the quality of my work and relate directly to your job post are attached to this proposal for you.
 
-${tone.closing}
+**— Prove your credibility —**
+Here's what you should know about me:
+- 7+ years of experience in ${experienceDescription}
+- Successfully completed 200+ client projects with excellent feedback
+- Expert in ${jobKeywords || experienceDescription}
+${data.yourExperience ? `- ${data.yourExperience}` : ""}
 
-I look forward to discussing your project further.
+**— List what I can bring to the project —**
+Here's what I can bring to your project:
+${projectBenefits}
 
-Best regards,
+**— Include a call to action —**
+
+Let's schedule a quick 10-minute introduction call so that we can discuss your project in more detail and ensure that I will be the perfect fit. I have today open from 10 AM to 2 PM (EST).
+
+If those times don't work for you, just let me know what works best and I will do my best to alter my schedule around your availability.
+
+Questions for the call:
+- What is your timeline for this project?
+- Do you have any specific design preferences or examples you like?
+- What would make this project a success in your view?
+
+I am looking forward to hearing more about your exciting project and how I can help you! : )
+
+**— Closing —**
+
+Best Regards,
+
 Sazz`;
 
-  // Adjust length by trimming or expanding as needed
+  // Adjust length if needed
   return adjustLength(proposal, data.length);
 };
 
-// Simple function to extract keywords from job description
+// Extract keywords from job description
 const extractKeywords = (jobDescription: string): string[] => {
   const skills = ["design", "development", "UI", "UX", "branding", "logo", "website", "app", 
-                 "mobile", "responsive", "WordPress", "Webflow", "Wix", "Framer"];
+                 "mobile", "responsive", "WordPress", "Webflow", "Wix", "Framer", 
+                 "graphics", "illustration", "animation", "wireframing", "prototyping"];
   
   const foundSkills = skills.filter(skill => 
     jobDescription.toLowerCase().includes(skill.toLowerCase())
   );
   
   return foundSkills.length > 0 ? 
-    foundSkills.slice(0, 3) : // Limit to top 3 for brevity
+    foundSkills.slice(0, 4) : // Limit to top 4 for brevity
     [];
+};
+
+// Generate project benefits based on job description
+const generateProjectBenefits = (jobDescription: string, experienceType: string): string => {
+  const description = jobDescription.toLowerCase();
+  let benefits = [];
+  
+  // Add general benefits based on experience type
+  if (experienceType === "ui-ux") {
+    benefits.push("Intuitive and user-friendly interfaces that enhance user experience");
+    benefits.push("Modern design aesthetic that aligns with current industry trends");
+  } else if (experienceType === "graphic-design") {
+    benefits.push("Visually compelling designs that effectively communicate your brand message");
+    benefits.push("Attention to detail and color theory to create impactful visuals");
+  } else if (experienceType === "logo-branding") {
+    benefits.push("Distinctive visual identity that reflects your brand values");
+    benefits.push("Comprehensive brand guidelines to ensure consistency");
+  } else if (experienceType === "cms") {
+    benefits.push("Custom, responsive website built with your preferred CMS");
+    benefits.push("User-friendly admin interface for easy content management");
+  } else if (experienceType === "development") {
+    benefits.push("Clean, efficient code that follows best practices");
+    benefits.push("Seamless functionality across all devices and browsers");
+  }
+  
+  // Add additional benefits based on job description keywords
+  if (description.includes("responsive") || description.includes("mobile")) {
+    benefits.push("Fully responsive design that works flawlessly on all devices");
+  }
+  
+  if (description.includes("deadline") || description.includes("urgent")) {
+    benefits.push("Quick turnaround time while maintaining high quality standards");
+  }
+  
+  if (description.includes("revisions") || description.includes("feedback")) {
+    benefits.push("Collaborative approach with regular updates and revisions");
+  }
+  
+  if (description.includes("seo") || description.includes("search engine")) {
+    benefits.push("SEO-friendly design and implementation");
+  }
+  
+  // Format the benefits as bullet points
+  return benefits.map(benefit => `- ${benefit}`).join("\n");
 };
 
 const adjustLength = (text: string, targetWords: number): string => {
@@ -107,31 +153,52 @@ const adjustLength = (text: string, targetWords: number): string => {
     return text; // Already shorter than target
   }
   
-  // Simple trimming approach - in a real AI system this would be more sophisticated
-  const ratio = targetWords / currentLength;
-  const paragraphs = text.split('\n\n');
+  // We'll aim to preserve the template structure while reducing content
+  const sections = text.split("**—");
   
-  // Keep intro and closing paragraphs, adjust middle paragraphs
-  if (paragraphs.length >= 3) {
-    const intro = paragraphs[0];
-    const closing = paragraphs[paragraphs.length - 1];
-    const signature = paragraphs[paragraphs.length - 2];
-    
-    // Compress middle paragraphs
-    const middleParagraphs = paragraphs.slice(1, -2);
-    let middleText = middleParagraphs.join(' ');
-    const middleWords = middleText.split(/\s+/);
-    
-    // Calculate how many words to keep from middle
-    const wordsToKeep = Math.max(1, Math.floor((targetWords - intro.split(/\s+/).length - 
-                                              closing.split(/\s+/).length - 
-                                              signature.split(/\s+/).length)));
-    
-    middleText = middleWords.slice(0, wordsToKeep).join(' ');
-    
-    return [intro, middleText, signature, closing].join('\n\n');
+  if (sections.length < 3) {
+    // If splitting didn't work as expected, just truncate
+    return words.slice(0, targetWords).join(' ');
   }
   
-  // Fallback: just truncate
-  return words.slice(0, targetWords).join(' ');
+  // Preserve introduction and closing
+  const intro = "**—" + sections[1];
+  const closing = "**—" + sections[sections.length - 1];
+  
+  // Determine how many words we have for the middle sections
+  const introWords = intro.split(/\s+/).length;
+  const closingWords = closing.split(/\s+/).length;
+  const remainingWords = targetWords - introWords - closingWords;
+  
+  // If we can't fit everything, prioritize
+  if (remainingWords <= 0) {
+    return intro + "\n\n" + closing;
+  }
+  
+  // Shorten the middle sections
+  const middleSections = sections.slice(2, -1);
+  let shortenedMiddle = "";
+  let wordsUsed = 0;
+  
+  for (let i = 0; i < middleSections.length; i++) {
+    const section = "**—" + middleSections[i];
+    const sectionWords = section.split(/\s+/).length;
+    
+    if (wordsUsed + sectionWords <= remainingWords) {
+      // We can include this section in full
+      shortenedMiddle += section;
+      wordsUsed += sectionWords;
+    } else {
+      // We need to truncate this section
+      const availableWords = remainingWords - wordsUsed;
+      if (availableWords > 20) { // Only include if we can keep a meaningful amount
+        const truncatedSection = section.split(/\s+/).slice(0, availableWords).join(' ');
+        shortenedMiddle += truncatedSection;
+      }
+      break;
+    }
+  }
+  
+  return intro + shortenedMiddle + closing;
 };
+
