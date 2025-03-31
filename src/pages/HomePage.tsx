@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
   const handleGenerate = async (formData: ProposalFormData) => {
     try {
       setIsLoading(true);
-      setCurrentFormData(formData);
+      setCurrentFormData(formData); // Save the current form data
       const generatedProposal = await generateProposal(formData);
       setProposal(generatedProposal);
     } catch (error) {
@@ -26,7 +26,19 @@ const HomePage: React.FC = () => {
 
   const handleRegenerate = async () => {
     if (currentFormData) {
-      await handleGenerate(currentFormData);
+      try {
+        setIsLoading(true);
+        const regeneratedProposal = await generateProposal(currentFormData);
+        setProposal(regeneratedProposal);
+        toast.success("Proposal regenerated successfully");
+      } catch (error) {
+        console.error('Error regenerating proposal:', error);
+        toast.error("Failed to regenerate proposal. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      toast.error("No form data available for regeneration");
     }
   };
 
@@ -55,6 +67,7 @@ const HomePage: React.FC = () => {
             proposal={proposal} 
             onSave={handleSave} 
             onRegenerate={handleRegenerate} 
+            isLoading={isLoading}
           />
         ) : (
           <div className="flex items-center justify-center h-full">

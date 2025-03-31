@@ -1,3 +1,4 @@
+
 import { ProposalFormData } from "@/components/ProposalForm";
 
 export const generateProposal = async (formData: ProposalFormData): Promise<string> => {
@@ -18,22 +19,26 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   
   const tonePhrases = {
     professional: {
-      intro: "I'm writing to express my interest in your project. After reviewing your requirements,",
+      intro: "I'm writing to express my interest in your project.",
+      understanding: "After carefully reviewing your requirements,",
       experience: "I have extensive experience in",
-      closing: "I'm confident I can deliver excellent results for your project."
+      closing: "I'm confident I can deliver excellent results that meet all your project goals."
     },
     friendly: {
-      intro: "I noticed your project and I'm excited about the opportunity. Based on your description,",
+      intro: "I noticed your project and I'm excited about the opportunity!",
+      understanding: "Looking at your description,",
       experience: "I've worked on similar projects involving",
-      closing: "I'd love to chat more about how I can help with your project!"
+      closing: "I'd love to chat more about how I can help bring your vision to life!"
     },
     confident: {
-      intro: "I'm the freelancer you're looking for to handle your project needs.",
+      intro: "I'm the ideal freelancer for your project.",
+      understanding: "Based on the details you've provided,",
       experience: "My background includes successful delivery of",
-      closing: "I guarantee high-quality work delivered on time."
+      closing: "I guarantee high-quality work delivered on time with no compromises."
     },
     formal: {
-      intro: "I would like to submit my application for your consideration. Upon reviewing your project details,",
+      intro: "I would like to submit my application for your consideration.",
+      understanding: "Upon thorough analysis of your project details,",
       experience: "My professional background encompasses",
       closing: "I would welcome the opportunity to discuss how my qualifications align with your requirements."
     }
@@ -51,9 +56,19 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   const experienceType = data.experienceType as keyof typeof experienceDetails;
   const experienceDescription = experienceDetails[experienceType] || "various design and development projects";
   
+  // Extract key information from job description if available
+  let jobInsights = "";
+  if (data.jobDescription && data.jobDescription.trim().length > 0) {
+    // Simple keyword extraction to demonstrate understanding the job
+    const keywords = extractKeywords(data.jobDescription);
+    if (keywords.length > 0) {
+      jobInsights = `I understand you need ${keywords.join(", ")} for your project. `;
+    }
+  }
+
   const proposal = `Hello,
 
-${tone.intro} I understand you need someone with expertise in this field.
+${tone.intro} ${tone.understanding} ${jobInsights}I'm ready to help you achieve your goals.
 
 ${tone.experience} ${experienceDescription} With 7+ years of experience and over 200 successfully completed client projects, I have the expertise needed to deliver exceptional results for your project. ${data.yourExperience ? `Additionally, ${data.yourExperience}` : ""}
 
@@ -68,6 +83,20 @@ Sazz`;
 
   // Adjust length by trimming or expanding as needed
   return adjustLength(proposal, data.length);
+};
+
+// Simple function to extract keywords from job description
+const extractKeywords = (jobDescription: string): string[] => {
+  const skills = ["design", "development", "UI", "UX", "branding", "logo", "website", "app", 
+                 "mobile", "responsive", "WordPress", "Webflow", "Wix", "Framer"];
+  
+  const foundSkills = skills.filter(skill => 
+    jobDescription.toLowerCase().includes(skill.toLowerCase())
+  );
+  
+  return foundSkills.length > 0 ? 
+    foundSkills.slice(0, 3) : // Limit to top 3 for brevity
+    [];
 };
 
 const adjustLength = (text: string, targetWords: number): string => {
