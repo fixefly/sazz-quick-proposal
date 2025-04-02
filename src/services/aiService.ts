@@ -1,4 +1,3 @@
-
 import { ProposalFormData } from "@/components/ProposalForm";
 
 export const generateProposal = async (formData: ProposalFormData): Promise<string> => {
@@ -40,13 +39,20 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   
   let communicationText;
   if (communicationMethod === "call") {
-    communicationText = `Let's schedule a quick 10-minute introduction call so that we can discuss your project in more detail and ensure that I will be the perfect fit. I have today open from 10 AM to 2 PM (EST).\n\nIf those times don't work for you, just let me know what works best and I will do my best to alter my schedule around your availability.`;
+    communicationText = `Let's schedule a quick 10-minute introduction call so that we can discuss your project in more detail and ensure that I will be the perfect fit. I have availability throughout the week.\n\nIf you'd like to propose a specific time that works for you, I'll do my best to accommodate your schedule.`;
   } else {
-    communicationText = `I'm available to chat about your project in more detail right away. Feel free to message me anytime, and I typically respond within a few hours. I'd love to learn more about your requirements and discuss how I can help you achieve your project goals.`;
+    communicationText = `I'm available to chat about your project in more detail right away. Feel free to message me anytime. I'd love to learn more about your requirements and discuss how I can help you achieve your project goals.`;
   }
+  
+  // First analyze client's needs
+  const clientNeedsAnalysis = data.jobDescription ? 
+    analyzeClientNeeds(data.jobDescription) : 
+    `Based on your project details, I understand you're looking for quality ${experienceDescription} work that meets your specific requirements.`;
   
   // Format the proposal with proper paragraphs
   const introduction = `Hi there!\n\nThank you so much for providing detailed information about your ${data.jobTitle} job. It instantly grabbed my attention and aligns perfectly with my experience as a ${experienceDescription} specialist.`;
+  
+  const clientUnderstanding = `${clientNeedsAnalysis}`;
   
   const workExamples = `As you can view on my profile, I've completed numerous ${experienceDescription} projects with 5-star reviews and positive client feedback. Two specific examples that showcase the quality of my work and relate directly to your job post are attached to this proposal for you.`;
   
@@ -66,7 +72,7 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   const closing = `I am looking forward to hearing more about your exciting project and how I can help you!\n\nBest Regards,\nSazz`;
   
   // Combine all sections with proper spacing
-  const proposal = `${introduction}\n\n${workExamples}\n\n${credibility}\n\n${projectValue}\n\n${callToAction}\n\n${questions}\n\n${closing}`;
+  const proposal = `${introduction}\n\n${clientUnderstanding}\n\n${workExamples}\n\n${credibility}\n\n${projectValue}\n\n${callToAction}\n\n${questions}\n\n${closing}`;
 
   // Adjust length if needed
   return adjustLength(proposal, data.length);
@@ -85,6 +91,37 @@ const extractKeywords = (jobDescription: string): string[] => {
   return foundSkills.length > 0 ? 
     foundSkills.slice(0, 4) : // Limit to top 4 for brevity
     [];
+};
+
+// Analyze client needs based on job description
+const analyzeClientNeeds = (jobDescription: string): string => {
+  const description = jobDescription.toLowerCase();
+  let analysis = "After reviewing your project details, I understand that you're looking for ";
+  
+  // Identify key client needs based on the job description
+  if (description.includes("responsive") || description.includes("mobile")) {
+    analysis += "a responsive design that works seamlessly across all devices. ";
+  } else if (description.includes("logo") || description.includes("brand")) {
+    analysis += "a cohesive brand identity with impactful visuals. ";
+  } else if (description.includes("website") || description.includes("web")) {
+    analysis += "a professional website that represents your brand effectively. ";
+  } else if (description.includes("app") || description.includes("mobile app")) {
+    analysis += "a user-friendly mobile application with intuitive navigation. ";
+  } else {
+    analysis += "quality design work that meets your specific requirements. ";
+  }
+  
+  // Add understanding of timeline if mentioned
+  if (description.includes("urgent") || description.includes("asap") || description.includes("quickly")) {
+    analysis += "I understand that timing is critical for this project and can prioritize accordingly. ";
+  }
+  
+  // Add understanding of quality expectations
+  if (description.includes("high quality") || description.includes("professional") || description.includes("premium")) {
+    analysis += "I can see that high-quality, professional results are important to you. ";
+  }
+  
+  return analysis;
 };
 
 // Generate project benefits text based on job description
