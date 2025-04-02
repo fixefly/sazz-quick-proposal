@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface ProposalFormProps {
   onGenerate: (formData: ProposalFormData) => void;
@@ -21,6 +22,7 @@ export interface ProposalFormData {
   tone: string;
   length: number;
   experienceType: string;
+  communicationMethod: string;
 }
 
 const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) => {
@@ -32,6 +34,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
     tone: 'professional',
     length: 150,
     experienceType: 'ui-ux',
+    communicationMethod: 'call',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -128,6 +131,24 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
                 <SelectItem value="formal">Formal</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Preferred Communication Method</Label>
+            <RadioGroup 
+              value={formData.communicationMethod} 
+              onValueChange={(value) => handleSelectChange('communicationMethod', value)}
+              className="flex space-x-4 mt-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="call" id="comm-call" />
+                <Label htmlFor="comm-call" className="cursor-pointer">Call</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="chat" id="comm-chat" />
+                <Label htmlFor="comm-chat" className="cursor-pointer">Chat</Label>
+              </div>
+            </RadioGroup>
           </div>
 
           <div className="space-y-4">

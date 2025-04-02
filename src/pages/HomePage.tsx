@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ProposalForm, { ProposalFormData } from '@/components/ProposalForm';
 import ProposalOutput from '@/components/ProposalOutput';
@@ -18,6 +17,7 @@ const HomePage: React.FC = () => {
     tone: 'professional',
     length: 150,
     experienceType: 'ui-ux',
+    communicationMethod: 'call',
   };
 
   const handleGenerate = async (formData: ProposalFormData) => {

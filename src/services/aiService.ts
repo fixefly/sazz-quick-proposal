@@ -1,3 +1,4 @@
+
 import { ProposalFormData } from "@/components/ProposalForm";
 
 export const generateProposal = async (formData: ProposalFormData): Promise<string> => {
@@ -34,6 +35,16 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   const experienceType = data.experienceType as keyof typeof experienceDetails;
   const experienceDescription = experienceDetails[experienceType] || "design and development";
   
+  // Customize communication method based on preference
+  const communicationMethod = data.communicationMethod || "call";
+  
+  let communicationText;
+  if (communicationMethod === "call") {
+    communicationText = `Let's schedule a quick 10-minute introduction call so that we can discuss your project in more detail and ensure that I will be the perfect fit. I have today open from 10 AM to 2 PM (EST).\n\nIf those times don't work for you, just let me know what works best and I will do my best to alter my schedule around your availability.`;
+  } else {
+    communicationText = `I'm available to chat about your project in more detail right away. Feel free to message me anytime, and I typically respond within a few hours. I'd love to learn more about your requirements and discuss how I can help you achieve your project goals.`;
+  }
+  
   // Format the proposal with proper paragraphs
   const introduction = `Hi there!\n\nThank you so much for providing detailed information about your ${data.jobTitle} job. It instantly grabbed my attention and aligns perfectly with my experience as a ${experienceDescription} specialist.`;
   
@@ -43,9 +54,14 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   
   const projectValue = `Here's what I can bring to your project: I can provide tremendous value by ${projectBenefits}.`;
   
-  const callToAction = `Let's schedule a quick 10-minute introduction call so that we can discuss your project in more detail and ensure that I will be the perfect fit. I have today open from 10 AM to 2 PM (EST).\n\nIf those times don't work for you, just let me know what works best and I will do my best to alter my schedule around your availability.`;
+  const callToAction = communicationText;
   
-  const questions = `During our call, I'd like to understand:\n- Your timeline for this project\n- Any specific design preferences you have\n- What would make this project a success in your view`;
+  let questions = "";
+  if (communicationMethod === "call") {
+    questions = `During our call, I'd like to understand:\n- Your timeline for this project\n- Any specific design preferences you have\n- What would make this project a success in your view`;
+  } else {
+    questions = `I'd like to understand:\n- Your timeline for this project\n- Any specific design preferences you have\n- What would make this project a success in your view`;
+  }
   
   const closing = `I am looking forward to hearing more about your exciting project and how I can help you!\n\nBest Regards,\nSazz`;
   
