@@ -33,7 +33,7 @@ const ProposalOutput: React.FC<ProposalOutputProps> = ({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Your FreeProp Proposal</CardTitle>
+        <CardTitle className="text-xl font-semibold">Your Custom Proposal</CardTitle>
       </CardHeader>
       <CardContent>
         <Textarea
