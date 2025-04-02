@@ -10,6 +10,16 @@ const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentFormData, setCurrentFormData] = useState<ProposalFormData | null>(null);
 
+  const initialFormData: ProposalFormData = {
+    jobTitle: '',
+    jobDescription: '',
+    clientRequirements: '',
+    yourExperience: '',
+    tone: 'professional',
+    length: 150,
+    experienceType: 'ui-ux',
+  };
+
   const handleGenerate = async (formData: ProposalFormData) => {
     try {
       setIsLoading(true);
@@ -42,6 +52,12 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const handleNewProposal = () => {
+    setProposal(null);
+    setCurrentFormData(null);
+    toast.info("Start a new proposal");
+  };
+
   const handleSave = (proposal: string) => {
     const savedProposals = JSON.parse(localStorage.getItem('savedProposals') || '[]');
     const newProposal = {
@@ -60,21 +76,26 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <ProposalForm onGenerate={handleGenerate} isLoading={isLoading} />
+        {!proposal && (
+          <ProposalForm onGenerate={handleGenerate} isLoading={isLoading} />
+        )}
         
         {proposal ? (
-          <ProposalOutput 
-            proposal={proposal} 
-            onSave={handleSave} 
-            onRegenerate={handleRegenerate} 
-            isLoading={isLoading}
-          />
+          <div className={!proposal ? "lg:col-span-2" : ""}>
+            <ProposalOutput 
+              proposal={proposal} 
+              onSave={handleSave} 
+              onRegenerate={handleRegenerate} 
+              onNewProposal={handleNewProposal}
+              isLoading={isLoading}
+            />
+          </div>
         ) : (
           <div className="flex items-center justify-center h-full">
             <div className="text-center p-8 border rounded-lg bg-muted/20">
               <h3 className="text-lg font-medium mb-2">Your proposal will appear here</h3>
               <p className="text-muted-foreground">
-                Fill out the form on the left and click "Generate Proposal"
+                Fill out the form and click "Generate Proposal"
               </p>
             </div>
           </div>

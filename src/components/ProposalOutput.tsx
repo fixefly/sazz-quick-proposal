@@ -9,6 +9,7 @@ interface ProposalOutputProps {
   proposal: string;
   onSave: (proposal: string) => void;
   onRegenerate: () => void;
+  onNewProposal: () => void;
   isLoading?: boolean;
 }
 
@@ -16,6 +17,7 @@ const ProposalOutput: React.FC<ProposalOutputProps> = ({
   proposal, 
   onSave, 
   onRegenerate,
+  onNewProposal,
   isLoading = false 
 }) => {
   const [editedProposal, setEditedProposal] = useState(proposal);
@@ -44,7 +46,7 @@ const ProposalOutput: React.FC<ProposalOutputProps> = ({
           style={{ lineHeight: "1.6" }}
         />
       </CardContent>
-      <CardFooter className="flex justify-between gap-4">
+      <CardFooter className="flex justify-between gap-2 flex-wrap">
         <Button 
           variant="outline" 
           onClick={onRegenerate} 
@@ -52,6 +54,14 @@ const ProposalOutput: React.FC<ProposalOutputProps> = ({
           disabled={isLoading}
         >
           {isLoading ? "Generating..." : "Regenerate"}
+        </Button>
+        <Button 
+          variant="outline"
+          onClick={onNewProposal}
+          className="flex-1"
+          disabled={isLoading}
+        >
+          New Proposal
         </Button>
         <Button 
           onClick={handleCopy} 
