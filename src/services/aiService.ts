@@ -1,4 +1,3 @@
-
 import { ProposalFormData } from "@/components/ProposalForm";
 
 export const generateProposal = async (formData: ProposalFormData): Promise<string> => {
@@ -35,8 +34,23 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   const experienceType = data.experienceType as keyof typeof experienceDetails;
   const experienceDescription = experienceDetails[experienceType] || "design and development";
   
-  // Format the proposal as a single paragraph without section headings
-  const proposal = `Hi there! Thank you so much for providing detailed information about your ${data.jobTitle} job. It instantly grabbed my attention and aligns perfectly with my experience as a ${experienceDescription} specialist with 7+ years of experience working with over 150+ clients. As you can view on my Upwork profile, I've completed numerous ${experienceDescription} projects with 5-star reviews and positive client feedback. Two specific examples that showcase the quality of my work and relate directly to your job post are attached to this proposal for you. I pride myself on my expertise in ${keywordsList}, my ability to deliver projects on time, and my commitment to client satisfaction. I can bring tremendous value to your project by ${projectBenefits}. Let's schedule a quick 10-minute introduction call so that we can discuss your project in more detail and ensure that I will be the perfect fit. I have today open from 10 AM to 2 PM (EST). If those times don't work for you, just let me know what works best and I will do my best to alter my schedule around your availability. During our call, I'd like to understand your timeline for this project, any specific design preferences you have, and what would make this project a success in your view. I am looking forward to hearing more about your exciting project and how I can help you! Best Regards, Sazz`;
+  // Format the proposal with proper paragraphs
+  const introduction = `Hi there!\n\nThank you so much for providing detailed information about your ${data.jobTitle} job. It instantly grabbed my attention and aligns perfectly with my experience as a ${experienceDescription} specialist.`;
+  
+  const workExamples = `As you can view on my profile, I've completed numerous ${experienceDescription} projects with 5-star reviews and positive client feedback. Two specific examples that showcase the quality of my work and relate directly to your job post are attached to this proposal for you.`;
+  
+  const credibility = `Here's what you should know about me: I have 7+ years of experience working with over 150+ clients. I pride myself on my expertise in ${keywordsList}, my ability to deliver projects on time, and my commitment to client satisfaction.`;
+  
+  const projectValue = `Here's what I can bring to your project: I can provide tremendous value by ${projectBenefits}.`;
+  
+  const callToAction = `Let's schedule a quick 10-minute introduction call so that we can discuss your project in more detail and ensure that I will be the perfect fit. I have today open from 10 AM to 2 PM (EST).\n\nIf those times don't work for you, just let me know what works best and I will do my best to alter my schedule around your availability.`;
+  
+  const questions = `During our call, I'd like to understand:\n- Your timeline for this project\n- Any specific design preferences you have\n- What would make this project a success in your view`;
+  
+  const closing = `I am looking forward to hearing more about your exciting project and how I can help you!\n\nBest Regards,\nSazz`;
+  
+  // Combine all sections with proper spacing
+  const proposal = `${introduction}\n\n${workExamples}\n\n${credibility}\n\n${projectValue}\n\n${callToAction}\n\n${questions}\n\n${closing}`;
 
   // Adjust length if needed
   return adjustLength(proposal, data.length);
@@ -109,24 +123,44 @@ const adjustLength = (text: string, targetWords: number): string => {
     return text; // Already shorter than target
   }
   
-  // For single paragraph format, we'll intelligently trim the middle sections
-  // while preserving the greeting and closing
+  // Instead of trimming by preserving sections, we'll try to preserve the paragraph structure
+  // while reducing the content proportionally across all sections
   
-  // Preserve the first quarter and last quarter of the text
-  const preserveStart = Math.floor(targetWords * 0.3);
-  const preserveEnd = Math.floor(targetWords * 0.3);
-  const middleWords = targetWords - preserveStart - preserveEnd;
+  // Split the text into paragraphs
+  const paragraphs = text.split('\n\n');
   
-  if (middleWords <= 0) {
-    // If target is very small, just return the start and end
-    return words.slice(0, preserveStart).join(' ') + ' ... ' + 
-           words.slice(words.length - preserveEnd).join(' ');
-  }
+  // Calculate the total reduction needed
+  const reductionFactor = targetWords / currentLength;
   
-  // Take words from the middle section to fill the remaining target
-  const start = words.slice(0, preserveStart).join(' ');
-  const middle = words.slice(preserveStart, preserveStart + middleWords).join(' ');
-  const end = words.slice(words.length - preserveEnd).join(' ');
+  // Reduce each paragraph proportionally
+  const reducedParagraphs = paragraphs.map(paragraph => {
+    const paragraphWords = paragraph.split(/\s+/);
+    
+    // For very small paragraphs (like greetings), keep them intact
+    if (paragraphWords.length <= 5) return paragraph;
+    
+    // Otherwise, reduce proportionally
+    const targetParagraphWords = Math.max(
+      5, // minimum 5 words per paragraph
+      Math.floor(paragraphWords.length * reductionFactor)
+    );
+    
+    // Preserve the beginning and end of each paragraph
+    if (targetParagraphWords >= paragraphWords.length) return paragraph;
+    
+    const preserveStart = Math.min(3, Math.floor(targetParagraphWords * 0.3));
+    const preserveEnd = Math.min(3, Math.floor(targetParagraphWords * 0.3));
+    const middleWords = targetParagraphWords - preserveStart - preserveEnd;
+    
+    if (middleWords <= 0) {
+      return paragraphWords.slice(0, preserveStart).join(' ') + '... ' + 
+             paragraphWords.slice(paragraphWords.length - preserveEnd).join(' ');
+    }
+    
+    return paragraphWords.slice(0, preserveStart).join(' ') + ' ' +
+           paragraphWords.slice(preserveStart, preserveStart + middleWords).join(' ') + ' ' +
+           paragraphWords.slice(paragraphWords.length - preserveEnd).join(' ');
+  });
   
-  return start + ' ' + middle + ' ' + end;
+  return reducedParagraphs.join('\n\n');
 };

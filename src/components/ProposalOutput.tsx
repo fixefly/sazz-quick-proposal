@@ -41,6 +41,7 @@ const ProposalOutput: React.FC<ProposalOutputProps> = ({
           value={editedProposal}
           onChange={(e) => setEditedProposal(e.target.value)}
           disabled={isLoading}
+          style={{ lineHeight: "1.6" }}
         />
       </CardContent>
       <CardFooter className="flex justify-between gap-4">
