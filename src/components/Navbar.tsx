@@ -8,7 +8,11 @@ const Navbar: React.FC = () => {
     <header className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <span className="text-xl font-bold text-primary">FreeProp</span>
+          <img 
+            src="/lovable-uploads/b9779a4e-2f53-4ff9-b45a-75558c5dbe15.png" 
+            alt="Proxob Logo" 
+            className="h-10"
+          />
         </div>
         <nav className="flex items-center gap-4">
           <Link to="/">

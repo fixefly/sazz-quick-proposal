@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import ProposalForm, { ProposalFormData } from '@/components/ProposalForm';
 import ProposalOutput from '@/components/ProposalOutput';
@@ -17,7 +18,7 @@ const HomePage: React.FC = () => {
     tone: 'professional',
     length: 150,
     experienceType: 'ui-ux',
-    communicationMethod: 'call',
+    communicationMethod: 'chat',
   };
 
   const handleGenerate = async (formData: ProposalFormData) => {
@@ -71,7 +72,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="container mx-auto py-6 px-4">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-primary mb-2">FreeProp</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">Proxob</h1>
         <p className="text-lg text-muted-foreground">Create customized job proposals in seconds</p>
       </div>
 

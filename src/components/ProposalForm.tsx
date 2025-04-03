@@ -34,7 +34,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
     tone: 'professional',
     length: 150,
     experienceType: 'ui-ux',
-    communicationMethod: 'call',
+    communicationMethod: 'chat',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -142,12 +142,12 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
               className="flex space-x-4 mt-2"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="call" id="comm-call" />
-                <Label htmlFor="comm-call" className="cursor-pointer">Call</Label>
-              </div>
-              <div className="flex items-center space-x-2">
                 <RadioGroupItem value="chat" id="comm-chat" />
                 <Label htmlFor="comm-chat" className="cursor-pointer">Chat</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="call" id="comm-call" />
+                <Label htmlFor="comm-call" className="cursor-pointer">Call</Label>
               </div>
             </RadioGroup>
           </div>
