@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import ThemeToggle from './ThemeToggle';
 
 const Navbar: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const Navbar: React.FC = () => {
           <Link to="/settings">
             <Button variant="ghost">Settings</Button>
           </Link>
+          <ThemeToggle />
         </nav>
       </div>
     </header>
