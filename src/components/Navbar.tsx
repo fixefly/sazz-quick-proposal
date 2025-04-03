@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-2">
           {theme === 'dark' ? (
             <img 
-              src="/lovable-uploads/3cdee35a-6663-42d8-882d-74673df78649.png" 
+              src="/lovable-uploads/acf1b823-b78f-44fe-a14e-06f588e30a50.png" 
               alt="Proxob Logo" 
               className="h-10"
             />
