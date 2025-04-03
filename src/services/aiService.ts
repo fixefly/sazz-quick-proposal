@@ -1,3 +1,4 @@
+
 import { ProposalFormData } from "@/components/ProposalForm";
 
 export const generateProposal = async (formData: ProposalFormData): Promise<string> => {
@@ -28,7 +29,9 @@ const createProposalTemplate = (data: ProposalFormData): string => {
     "graphic-design": "graphic design",
     "logo-branding": "logo design and branding",
     "cms": "content management systems",
-    "development": "web and app development"
+    "development": "web and app development",
+    "website": "website design and development",
+    "webapp-mobile": "webapp and mobile app development"
   };
 
   const experienceType = data.experienceType as keyof typeof experienceDetails;
@@ -54,7 +57,7 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   
   const clientUnderstanding = `${clientNeedsAnalysis}`;
   
-  const workExamples = `As you can view on my profile, I've completed numerous ${experienceDescription} projects with 5-star reviews and positive client feedback. Two specific examples that showcase the quality of my work and relate directly to your job post are attached to this proposal for you.`;
+  const workExamples = `As you can view on my profile, I've completed numerous ${experienceDescription} projects with 5-star reviews and positive client feedback.`;
   
   const credibility = `Here's what you should know about me: I have 7+ years of experience working with over 150+ clients. I pride myself on my expertise in ${keywordsList}, my ability to deliver projects on time, and my commitment to client satisfaction.`;
   
@@ -64,7 +67,7 @@ const createProposalTemplate = (data: ProposalFormData): string => {
   
   let questions = "";
   if (communicationMethod === "call") {
-    questions = `During our call, I'd like to understand:\n- Your timeline for this project\n- Any specific design preferences you have\n- What would make this project a success in your view`;
+    questions = `I'd like to understand:\n- Your timeline for this project\n- Any specific design preferences you have\n- What would make this project a success in your view`;
   } else {
     questions = `I'd like to understand:\n- Your timeline for this project\n- Any specific design preferences you have\n- What would make this project a success in your view`;
   }

@@ -97,11 +97,12 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ onGenerate, isLoading }) =>
                 <SelectValue placeholder="Select your area of expertise" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ui-ux">UI/UX Design (Website, Webapp, Mobile Apps)</SelectItem>
+                <SelectItem value="website">Website Design and Development</SelectItem>
+                <SelectItem value="ui-ux">UI/UX Design</SelectItem>
                 <SelectItem value="graphic-design">Graphic Design</SelectItem>
                 <SelectItem value="logo-branding">Logo and Branding</SelectItem>
-                <SelectItem value="cms">CMS (WordPress, Wix, Webflow, Framer)</SelectItem>
-                <SelectItem value="development">Development with Code</SelectItem>
+                <SelectItem value="cms">CMS Development (WordPress, Webflow, Framer, Wix)</SelectItem>
+                <SelectItem value="webapp-mobile">Webapp and Mobile App Development</SelectItem>
               </SelectContent>
             </Select>
           </div>
