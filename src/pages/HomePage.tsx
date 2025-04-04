@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProposalForm, { ProposalFormData } from '@/components/ProposalForm';
 import ProposalOutput from '@/components/ProposalOutput';
+import ApiKeyInput from '@/components/ApiKeyInput';
 import { generateProposal } from '@/services/aiService';
 import { toast } from "sonner";
 
@@ -9,6 +10,21 @@ const HomePage: React.FC = () => {
   const [proposal, setProposal] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentFormData, setCurrentFormData] = useState<ProposalFormData | null>(null);
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Check if API key is stored
+    const storedKey = localStorage.getItem('openai_api_key');
+    setHasApiKey(!!storedKey);
+
+    // Set up storage event listener to update state when API key changes
+    const handleStorageChange = () => {
+      setHasApiKey(!!localStorage.getItem('openai_api_key'));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const initialFormData: ProposalFormData = {
     jobTitle: '',
@@ -23,6 +39,12 @@ const HomePage: React.FC = () => {
 
   const handleGenerate = async (formData: ProposalFormData) => {
     try {
+      // Check if API key is available
+      if (!localStorage.getItem('openai_api_key')) {
+        toast.error("Please set your OpenAI API key first");
+        return;
+      }
+
       setIsLoading(true);
       setCurrentFormData(formData); // Save the current form data
       const generatedProposal = await generateProposal(formData);
@@ -38,6 +60,12 @@ const HomePage: React.FC = () => {
   const handleRegenerate = async () => {
     if (currentFormData) {
       try {
+        // Check if API key is available
+        if (!localStorage.getItem('openai_api_key')) {
+          toast.error("Please set your OpenAI API key first");
+          return;
+        }
+
         setIsLoading(true);
         const regeneratedProposal = await generateProposal(currentFormData);
         setProposal(regeneratedProposal);
@@ -74,6 +102,9 @@ const HomePage: React.FC = () => {
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-primary mb-2">Proxob</h1>
         <p className="text-lg text-muted-foreground">Create customized job proposals in seconds</p>
+        <div className="mt-2">
+          <ApiKeyInput />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -96,7 +127,9 @@ const HomePage: React.FC = () => {
             <div className="text-center p-8 border rounded-lg bg-muted/20">
               <h3 className="text-lg font-medium mb-2">Your proposal will appear here</h3>
               <p className="text-muted-foreground">
-                Fill out the form and click "Generate Proposal"
+                {!hasApiKey 
+                  ? "Set your OpenAI API key first, then fill out the form"
+                  : "Fill out the form and click \"Generate Proposal\""}
               </p>
             </div>
           </div>
