@@ -27,22 +27,34 @@ const ApiKeyInput: React.FC = () => {
       return;
     }
     
+    // Validate that it looks like an OpenAI key (starts with "sk-")
+    if (!apiKey.trim().startsWith('sk-')) {
+      toast.error("Invalid API key format. OpenAI keys start with 'sk-'");
+      return;
+    }
+    
     localStorage.setItem('openai_api_key', apiKey.trim());
     toast.success("API key saved successfully");
     setIsOpen(false);
+    
+    // Trigger storage event for cross-component communication
+    window.dispatchEvent(new Event('storage'));
   };
 
   const handleRemoveKey = () => {
     localStorage.removeItem('openai_api_key');
     setApiKey('');
     toast.info("API key removed");
+    
+    // Trigger storage event for cross-component communication
+    window.dispatchEvent(new Event('storage'));
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          Configure API Key
+          {apiKey ? "Change API Key" : "Configure API Key"}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -68,9 +80,7 @@ const ApiKeyInput: React.FC = () => {
             <Button variant="outline" onClick={handleRemoveKey} disabled={!apiKey}>
               Remove Key
             </Button>
-            <DialogClose asChild>
-              <Button onClick={handleSaveKey}>Save Key</Button>
-            </DialogClose>
+            <Button onClick={handleSaveKey}>Save Key</Button>
           </div>
         </div>
       </DialogContent>

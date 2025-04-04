@@ -51,7 +51,11 @@ const HomePage: React.FC = () => {
       setProposal(generatedProposal);
     } catch (error) {
       console.error('Error generating proposal:', error);
-      toast.error("Failed to generate proposal. Please try again.");
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to generate proposal. Please try again.");
+      } else {
+        toast.error("Failed to generate proposal. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +76,11 @@ const HomePage: React.FC = () => {
         toast.success("Proposal regenerated successfully");
       } catch (error) {
         console.error('Error regenerating proposal:', error);
-        toast.error("Failed to regenerate proposal. Please try again.");
+        if (error instanceof Error) {
+          toast.error(error.message || "Failed to regenerate proposal. Please try again.");
+        } else {
+          toast.error("Failed to regenerate proposal. Please try again.");
+        }
       } finally {
         setIsLoading(false);
       }
