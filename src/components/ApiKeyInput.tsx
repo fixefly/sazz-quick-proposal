@@ -12,7 +12,7 @@ const ApiKeyInput: React.FC = () => {
   
   useEffect(() => {
     // Check if API key is already stored
-    const storedKey = localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
+    const storedKey = localStorage.getItem('groq_api_key') || localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
     if (storedKey) {
       setApiKey(storedKey);
     } else {
@@ -33,7 +33,7 @@ const ApiKeyInput: React.FC = () => {
       return;
     }
     
-    localStorage.setItem('deepseek_api_key', apiKey.trim());
+    localStorage.setItem('groq_api_key', apiKey.trim());
     toast.success("API key saved successfully");
     setIsOpen(false);
     
@@ -42,6 +42,7 @@ const ApiKeyInput: React.FC = () => {
   };
 
   const handleRemoveKey = () => {
+    localStorage.removeItem('groq_api_key');
     localStorage.removeItem('deepseek_api_key');
     localStorage.removeItem('openai_api_key');
     setApiKey('');
@@ -60,9 +61,9 @@ const ApiKeyInput: React.FC = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>DeepSeek API Key</DialogTitle>
+          <DialogTitle>Groq API Key</DialogTitle>
           <DialogDescription>
-            Enter your DeepSeek API key to use AI for generating proposals. 
+            Enter your Groq API key to use AI for generating proposals. 
             Your key is stored securely in your browser and is not sent to our servers.
           </DialogDescription>
         </DialogHeader>
@@ -72,7 +73,7 @@ const ApiKeyInput: React.FC = () => {
             <Input
               id="apiKey"
               type="password"
-              placeholder="Enter your DeepSeek API key..."
+              placeholder="Enter your Groq API key..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
             />

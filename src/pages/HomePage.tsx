@@ -14,12 +14,13 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     // Check if API key is stored
-    const storedKey = localStorage.getItem('openai_api_key');
+    const storedKey = localStorage.getItem('groq_api_key') || localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
     setHasApiKey(!!storedKey);
 
     // Set up storage event listener to update state when API key changes
     const handleStorageChange = () => {
-      setHasApiKey(!!localStorage.getItem('openai_api_key'));
+      const key = localStorage.getItem('groq_api_key') || localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
+      setHasApiKey(!!key);
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -40,8 +41,8 @@ const HomePage: React.FC = () => {
   const handleGenerate = async (formData: ProposalFormData) => {
     try {
       // Check if API key is available
-      if (!localStorage.getItem('openai_api_key')) {
-        toast.error("Please set your OpenAI API key first");
+      if (!localStorage.getItem('groq_api_key') && !localStorage.getItem('deepseek_api_key') && !localStorage.getItem('openai_api_key')) {
+        toast.error("Please set your Groq API key first");
         return;
       }
 
@@ -65,8 +66,8 @@ const HomePage: React.FC = () => {
     if (currentFormData) {
       try {
         // Check if API key is available
-        if (!localStorage.getItem('openai_api_key')) {
-          toast.error("Please set your OpenAI API key first");
+        if (!localStorage.getItem('groq_api_key') && !localStorage.getItem('deepseek_api_key') && !localStorage.getItem('openai_api_key')) {
+          toast.error("Please set your Groq API key first");
           return;
         }
 
@@ -136,7 +137,7 @@ const HomePage: React.FC = () => {
               <h3 className="text-lg font-medium mb-2">Your proposal will appear here</h3>
               <p className="text-muted-foreground">
                 {!hasApiKey 
-                  ? "Set your OpenAI API key first, then fill out the form"
+                  ? "Set your Groq API key first, then fill out the form"
                   : "Fill out the form and click \"Generate Proposal\""}
               </p>
             </div>

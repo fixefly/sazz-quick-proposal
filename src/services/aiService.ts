@@ -26,20 +26,20 @@ export const generateProposal = async (formData: ProposalFormData): Promise<stri
     `;
 
     // Check if API key exists
-    const apiKey = localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
+    const apiKey = localStorage.getItem('groq_api_key') || localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
     if (!apiKey) {
-      throw new Error("No API key found. Please add your DeepSeek API key in settings.");
+      throw new Error("No API key found. Please add your Groq API key in settings.");
     }
 
-    // Call DeepSeek API
-    const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+    // Call Groq API
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
+        model: "llama3-8b-8192", // Using Llama 3 model from Groq
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }

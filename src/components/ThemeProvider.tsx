@@ -7,7 +7,7 @@ import { type ThemeProviderProps as NextThemeProviderProps } from "next-themes"
 export interface ThemeProviderProps extends Omit<NextThemeProviderProps, 'attribute'> {
   children: React.ReactNode;
   defaultTheme?: string;
-  attribute?: string | "class" | "data-theme";
+  attribute?: "class" | "data-theme";
   enableSystem?: boolean;
   storageKey?: string;
   forcedTheme?: string;
