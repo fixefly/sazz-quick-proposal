@@ -1,7 +1,10 @@
 
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+"use client"
 
-type ThemeProviderProps = {
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { type ThemeProviderProps as NextThemeProviderProps } from "next-themes"
+
+export interface ThemeProviderProps extends Omit<NextThemeProviderProps, 'attribute'> {
   children: React.ReactNode;
   defaultTheme?: string;
   attribute?: string | "class" | "data-theme";
@@ -9,7 +12,7 @@ type ThemeProviderProps = {
   storageKey?: string;
   forcedTheme?: string;
   disableTransitionOnChange?: boolean;
-};
+}
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (

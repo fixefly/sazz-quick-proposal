@@ -26,20 +26,20 @@ export const generateProposal = async (formData: ProposalFormData): Promise<stri
     `;
 
     // Check if API key exists
-    const apiKey = localStorage.getItem('openai_api_key');
+    const apiKey = localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
     if (!apiKey) {
-      throw new Error("No API key found. Please add your OpenAI API key in settings.");
+      throw new Error("No API key found. Please add your DeepSeek API key in settings.");
     }
 
-    // Call ChatGPT API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Call DeepSeek API
+    const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: "deepseek-chat",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }

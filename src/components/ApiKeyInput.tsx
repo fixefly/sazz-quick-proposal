@@ -12,7 +12,7 @@ const ApiKeyInput: React.FC = () => {
   
   useEffect(() => {
     // Check if API key is already stored
-    const storedKey = localStorage.getItem('openai_api_key');
+    const storedKey = localStorage.getItem('deepseek_api_key') || localStorage.getItem('openai_api_key');
     if (storedKey) {
       setApiKey(storedKey);
     } else {
@@ -27,13 +27,13 @@ const ApiKeyInput: React.FC = () => {
       return;
     }
     
-    // Validate that it looks like an OpenAI key (starts with "sk-")
-    if (!apiKey.trim().startsWith('sk-')) {
-      toast.error("Invalid API key format. OpenAI keys start with 'sk-'");
+    // Basic validation - check that it has some reasonable length
+    if (apiKey.trim().length < 10) {
+      toast.error("The provided API key seems too short");
       return;
     }
     
-    localStorage.setItem('openai_api_key', apiKey.trim());
+    localStorage.setItem('deepseek_api_key', apiKey.trim());
     toast.success("API key saved successfully");
     setIsOpen(false);
     
@@ -42,6 +42,7 @@ const ApiKeyInput: React.FC = () => {
   };
 
   const handleRemoveKey = () => {
+    localStorage.removeItem('deepseek_api_key');
     localStorage.removeItem('openai_api_key');
     setApiKey('');
     toast.info("API key removed");
@@ -59,9 +60,9 @@ const ApiKeyInput: React.FC = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>OpenAI API Key</DialogTitle>
+          <DialogTitle>DeepSeek API Key</DialogTitle>
           <DialogDescription>
-            Enter your OpenAI API key to use ChatGPT for generating proposals. 
+            Enter your DeepSeek API key to use AI for generating proposals. 
             Your key is stored securely in your browser and is not sent to our servers.
           </DialogDescription>
         </DialogHeader>
@@ -71,7 +72,7 @@ const ApiKeyInput: React.FC = () => {
             <Input
               id="apiKey"
               type="password"
-              placeholder="sk-..."
+              placeholder="Enter your DeepSeek API key..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
             />
